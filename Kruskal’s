@@ -1,0 +1,81 @@
+#include <stdio.h>
+
+int parent[10];
+
+// Find parent
+int find(int v)
+{
+    while(parent[v] != v)
+        v = parent[v];
+
+    return v;
+}
+
+int main()
+{
+    int n, i, j;
+    int cost[10][10];
+    int edges = 0;
+    int mincost = 0;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter cost matrix:\n");
+
+    for(i = 0; i < n; i++)
+    {
+        parent[i] = i;
+
+        for(j = 0; j < n; j++)
+        {
+            scanf("%d", &cost[i][j]);
+
+            if(cost[i][j] == 0)
+                cost[i][j] = 999;
+        }
+    }
+
+    printf("\nEdges in MST:\n");
+
+    while(edges < n - 1)
+    {
+        int min = 999;
+        int a, b;
+
+        // Find minimum edge
+        for(i = 0; i < n; i++)
+        {
+            for(j = 0; j < n; j++)
+            {
+                if(cost[i][j] < min)
+                {
+                    min = cost[i][j];
+                    a = i;
+                    b = j;
+                }
+            }
+        }
+
+        int u = find(a);
+        int v = find(b);
+
+        // No cycle
+        if(u != v)
+        {
+            printf("%d --> %d = %d\n", a, b, min);
+
+            mincost += min;
+
+            parent[u] = v;
+
+            edges++;
+        }
+
+        cost[a][b] = cost[b][a] = 999;
+    }
+
+    printf("\nTotal Cost = %d\n", mincost);
+
+    return 0;
+}
