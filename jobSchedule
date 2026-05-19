@@ -1,0 +1,91 @@
+#include<stdio.h>
+
+#define max 10
+
+struct job
+{
+    int id, deadline, profit;
+};
+
+void sort(struct job job[], int n)
+{
+    int i,j;
+    struct job temp;
+
+    // Sort by profit (descending)
+    for(i=0;i<n-1;i++)
+    {
+        for(j=i+1;j<n;j++)
+        {
+            if(job[i].profit < job[j].profit)
+            {
+                temp = job[i];
+                job[i] = job[j];
+                job[j] = temp;
+            }
+        }
+    }
+}
+
+void schedule(struct job job[], int n)
+{
+    int slot[max];
+    int i,j,maxD=0,totalp=0;
+
+    // Find maximum deadline
+    for(i=0;i<n;i++)
+    {
+        if(job[i].deadline > maxD)
+            maxD = job[i].deadline;
+    }
+
+    // Initialize slots
+    for(i=0;i<maxD;i++)
+        slot[i] = -1;
+
+    // Schedule jobs
+    for(i=0;i<n;i++)
+    {
+        for(j=job[i].deadline-1;j>=0;j--)
+        {
+            if(slot[j]==-1)
+            {
+                slot[j]=job[i].id;
+                totalp += job[i].profit;
+                break;
+            }
+        }
+    }
+
+    printf("\nScheduled Jobs: ");
+
+    for(i=0;i<maxD;i++)
+    {
+        if(slot[i]!=-1)
+            printf("J%d ",slot[i]);
+    }
+
+    printf("\nTotal Profit: %d",totalp);
+}
+
+int main()
+{
+    struct job job[max];
+    int n,i;
+
+    printf("Enter number of jobs: ");
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++)
+    {
+        job[i].id=i+1;
+
+        printf("Enter deadline and profit of Job %d: ",i+1);
+        scanf("%d %d",&job[i].deadline,&job[i].profit);
+    }
+
+    sort(job,n);
+    schedule(job,n);
+
+    return 0;
+}
