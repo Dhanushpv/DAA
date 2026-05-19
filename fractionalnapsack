@@ -1,0 +1,83 @@
+#include<stdio.h>
+
+struct Item
+{
+    int profit;
+    int weight;
+    float ratio;
+};
+
+void sort(struct Item item[], int n)
+{
+    int i, j;
+    struct Item temp;
+
+    for(i=0;i<n-1;i++)
+    {
+        for(j=0;j<n-i-1;j++)
+        {
+            if(item[j].ratio < item[j+1].ratio)
+            {
+                temp = item[j];
+                item[j] = item[j+1];
+                item[j+1] = temp;
+            }
+        }
+    }
+}
+
+float fractionalKnapsack(struct Item item[], int n, int capacity)
+{
+    int i;
+    float totalProfit = 0;
+
+    for(i=0;i<n;i++)
+    {
+        if(capacity >= item[i].weight)
+        {
+            totalProfit += item[i].profit;
+            capacity -= item[i].weight;
+        }
+        else
+        {
+            totalProfit += item[i].ratio * capacity;
+            break;
+        }
+    }
+
+    return totalProfit;
+}
+
+int main()
+{
+    struct Item item[50];
+    int n, i, capacity;
+    float maxProfit;
+
+    printf("Enter number of items: ");
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++)
+    {
+        printf("Enter profit and weight: ");
+        scanf("%d%d",
+        &item[i].profit,
+        &item[i].weight);
+
+        item[i].ratio =
+        (float)item[i].profit /
+        item[i].weight;
+    }
+
+    printf("Enter capacity: ");
+    scanf("%d",&capacity);
+
+    sort(item,n);
+
+    maxProfit = fractionalKnapsack(item,n,capacity);
+
+    printf("Maximum Profit = %.2f",
+    maxProfit);
+
+    return 0;
+}
