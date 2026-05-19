@@ -1,0 +1,31 @@
+#include <stdio.h>
+int main(){
+    int arr[50],key,i,j,n;
+    int found =0;
+
+    printf("Enter the number of Elements : ");
+    scanf("%d",&n);
+
+    printf("Enter the  Elements : ");
+    for(i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+
+    printf("Enter the key :");
+    scanf("%d",&key);
+
+    for(i=0;i<n;i++){
+        if(arr[i]==key){
+            found = 1;
+            printf("Key found at the index %d and the key is %d :",i+1,key);
+            break;
+
+        }
+    }
+
+    if(found == 0){
+        printf("key not found ");
+    }
+
+
+}
